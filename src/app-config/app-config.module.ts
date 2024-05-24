@@ -1,7 +1,6 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { validateConfig } from './helpers/validate-app-config.helper';
-import { mapAppConfig } from './helpers/map-app-config.helper';
+import { validateConfig, mapAppConfig } from './helpers';
 import { AppConfigService } from './app-config.service';
 
 @Module({})
