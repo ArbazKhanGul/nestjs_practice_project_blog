@@ -1,7 +1,7 @@
-import { plainToInstance } from 'class-transformer';
-import { AppConfigDTO } from '../dto/app-config.dto';
-import { validateSync } from 'class-validator';
 import { InternalServerErrorException } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
+import { validateSync } from 'class-validator';
+import { AppConfigDTO } from '../dto/app-config.dto';
 
 export function validateConfig(processEnv: NodeJS.ProcessEnv): AppConfigDTO {
   const castedEnv = plainToInstance(AppConfigDTO, processEnv, {
