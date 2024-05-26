@@ -10,4 +10,25 @@ export class AppConfigDTO {
   @IsNotEmpty()
   @IsNumber()
   PORT: number;
+
+  // Database
+  @IsNotEmpty()
+  @IsString()
+  POSTGRES_USER: string;
+
+  @IsNotEmpty()
+  @IsString()
+  POSTGRES_PASSWORD: string;
+
+  @IsNotEmpty()
+  @IsString()
+  POSTGRES_DB: string;
+
+  @IsNotEmpty()
+  @IsString()
+  POSTGRES_HOST: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  POSTGRES_PORT: number;
 }

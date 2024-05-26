@@ -12,4 +12,8 @@ export class AppConfigService {
   get core(): IAppConfig['core'] {
     return this.configService.get('core', { infer: true })!;
   }
+
+  get database(): IAppConfig['database'] {
+    return this.configService.get('database', { infer: true })!;
+  }
 }
