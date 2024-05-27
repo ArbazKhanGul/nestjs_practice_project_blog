@@ -16,4 +16,8 @@ export class AppConfigService {
   get database(): IAppConfig['database'] {
     return this.configService.get('database', { infer: true })!;
   }
+
+  get auth(): IAppConfig['auth'] {
+    return this.configService.get('auth', { infer: true })!;
+  }
 }

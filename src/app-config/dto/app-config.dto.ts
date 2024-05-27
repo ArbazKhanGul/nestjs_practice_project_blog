@@ -31,4 +31,21 @@ export class AppConfigDTO {
   @IsNotEmpty()
   @IsNumber()
   POSTGRES_PORT: number;
+
+  // AUTH
+  @IsNotEmpty()
+  @IsString()
+  ACCESS_TOKEN_SECRET: string;
+
+  @IsNotEmpty()
+  @IsString()
+  ACCESS_TOKEN_EXPIRATION: string;
+
+  @IsNotEmpty()
+  @IsString()
+  REFRESH_TOKEN_SECRET: string;
+
+  @IsNotEmpty()
+  @IsString()
+  REFRESH_TOKEN_EXPIRATION: string;
 }
