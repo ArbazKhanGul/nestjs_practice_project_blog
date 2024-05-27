@@ -3,17 +3,25 @@ import {
   Get,
   Post,
   Body,
-  Param,
   UseInterceptors,
   UploadedFile,
   ParseFilePipeBuilder,
   HttpStatus,
+  UseGuards,
+  NotFoundException,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
 import { UserService } from './user.service';
+import { AccessTokenGuard } from './guards/acess-token.guard';
+import { CurrentUserPayload } from './decorator/user-payload.decorator';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
+import { TokenPayload } from './types/jwt.types';
+import { Request } from 'express';
+import { LoginResponse, RefreshResponse } from './types/response';
 
 @Controller('user')
 export class UserController {
@@ -50,13 +58,28 @@ export class UserController {
   }
 
   @Post('/login')
-  login(@Body() loginUser: LoginDTO) {
+  async login(@Body() loginUser: LoginDTO): Promise<LoginResponse> {
     console.log('🚀 ~ UserController ~ login ~ loginUser:', loginUser);
     return this.userService.login(loginUser);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get('/profile')
+  @UseGuards(AccessTokenGuard)
+  async getProfile(@CurrentUserPayload('sub') userId: string) {
+    const user = await this.userService.findOneById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
+  @Get('/refreshToken')
+  @UseGuards(RefreshTokenGuard)
+  async refreshTokens(
+    @CurrentUserPayload() currentUserPayload: TokenPayload,
+    @Req() req: Request,
+  ): Promise<RefreshResponse> {
+    const refreshToken = req.headers.authorization!.split(' ')[1];
+    return this.userService.refreshTokens(currentUserPayload, refreshToken);
   }
 }

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -15,7 +16,7 @@ import { User, UserRole } from './entities/user.entity';
 import { TokenPayload, TokensPair } from './types/jwt.types';
 import { AppConfigService } from 'src/app-config/app-config.service';
 import { UserSession } from './entities/user-session.entity';
-import { LoginResponse } from './types/responseUser';
+import { LoginResponse, RefreshResponse } from './types/response';
 
 @Injectable()
 export class UserService {
@@ -122,5 +123,47 @@ export class UserService {
         expiresIn: this.appConfigService.auth.REFRESH_TOKEN_EXPIRATION,
       }),
     });
+  }
+
+  async refreshTokens(
+    currentUserPayload: TokenPayload,
+    refreshToken: string,
+  ): Promise<RefreshResponse> {
+    // Check if session exist
+    const userSession = await this.userSessionRepository.findOneBy({
+      id: currentUserPayload.session_id,
+    });
+
+    if (!userSession) {
+      throw new UnauthorizedException('Invalid session');
+    }
+
+    // Check if refresh token match
+    if (!(await userSession.compareRefreshToken(refreshToken))) {
+      // If doesn't match, delete session because someone is using an old `refreshToken` of the current session. The `refreshToken` is compromised.
+      await this.userSessionRepository.remove(userSession);
+      throw new UnauthorizedException('Compromised refresh token');
+    }
+
+    // Generate JWT Tokens
+    const tokenPayload = new TokenPayload({
+      sub: currentUserPayload.sub,
+      role: currentUserPayload.role,
+      session_id: currentUserPayload.session_id,
+    });
+    const tokensPair = await this.generateTokensPair(tokenPayload);
+
+    // Update User Session
+    userSession.refresh_token = tokensPair.refresh_token;
+    await this.userSessionRepository.save(userSession);
+
+    return {
+      access_token: tokensPair.access_token,
+      refresh_token: tokensPair.refresh_token,
+    };
+  }
+
+  findOneById(id: string): Promise<User | null> {
+    return this.userRepository.findOneBy({ id });
   }
 }

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { UserSession } from './entities/user-session.entity';
+import { AccessTokenStrategy, RefreshTokenStrategy } from './strategies';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { UserSession } from './entities/user-session.entity';
     JwtModule.register({}),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, AccessTokenStrategy, RefreshTokenStrategy],
 })
 export class UserModule {}
