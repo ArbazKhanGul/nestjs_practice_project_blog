@@ -24,7 +24,8 @@
     "typeorm:migration:run": "npm run typeorm:cli -- migration:run -d typeorm-datasource.ts",
     "typeorm:migration:revert": "npm run typeorm:cli -- migration:revert -d typeorm-datasource.ts",
     "typeorm:migration:show": "npm run typeorm:cli -- migration:show -d typeorm-datasource.ts",
-    "typeorm:schema:drop": "npm run typeorm:cli -- schema:drop -d typeorm-datasource.ts"
+    "typeorm:schema:drop": "npm run typeorm:cli -- schema:drop -d typeorm-datasource.ts",
+    "typeorm:seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d typeorm-datasource.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -45,6 +46,7 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.5.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

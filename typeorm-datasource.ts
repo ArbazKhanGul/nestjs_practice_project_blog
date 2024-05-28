@@ -4,11 +4,11 @@ dotenv.config({
 });
 
 import { DataSource, DataSourceOptions } from 'typeorm';
-// import { SeederOptions } from 'typeorm-extension';
+import { SeederOptions } from 'typeorm-extension';
 
 console.log(process.env.POSTGRES_USER);
 
-const options: DataSourceOptions = {
+const options: DataSourceOptions & SeederOptions = {
   type: 'postgres',
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
@@ -18,7 +18,7 @@ const options: DataSourceOptions = {
   logging: true,
   synchronize: false,
   entities: ['**/*.entity.ts'],
-  //   seeds: ['./seeds/*.seed.ts'],
+  seeds: ['./seeds/*.seed.ts'],
   migrations: ['./migrations/*.ts'],
 };
 

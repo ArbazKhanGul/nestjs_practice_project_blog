@@ -22,6 +22,9 @@ import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { TokenPayload } from './types/jwt.types';
 import { Request } from 'express';
 import { LoginResponse, RefreshResponse } from './types/response';
+import { RolesGuard } from './guards/roles.guard';
+import { Roles } from './decorator/roles.decorator';
+import { UserRole } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -81,5 +84,20 @@ export class UserController {
   ): Promise<RefreshResponse> {
     const refreshToken = req.headers.authorization!.split(' ')[1];
     return this.userService.refreshTokens(currentUserPayload, refreshToken);
+  }
+
+  @Get('/logout')
+  @UseGuards(RefreshTokenGuard)
+  async logout(
+    @CurrentUserPayload() currentUserPayload: TokenPayload,
+  ): Promise<boolean> {
+    return this.userService.logout(currentUserPayload);
+  }
+
+  @Get('/admin')
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Roles(UserRole.admin)
+  admin(): string {
+    return this.userService.admin();
   }
 }

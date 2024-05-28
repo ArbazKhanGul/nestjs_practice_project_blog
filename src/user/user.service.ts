@@ -166,4 +166,20 @@ export class UserService {
   findOneById(id: string): Promise<User | null> {
     return this.userRepository.findOneBy({ id });
   }
+
+  async logout(currentUserPayload: TokenPayload): Promise<boolean> {
+    // Delete User Session
+    const session = await this.userSessionRepository.findOneBy({
+      id: currentUserPayload.session_id,
+    });
+    if (!session) {
+      return true;
+    }
+    await this.userSessionRepository.remove(session);
+    return true;
+  }
+
+  admin(): string {
+    return 'this is only call by admin';
+  }
 }
