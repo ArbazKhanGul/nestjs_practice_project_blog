@@ -62,7 +62,6 @@ export class UserController {
 
   @Post('/login')
   async login(@Body() loginUser: LoginDTO): Promise<LoginResponse> {
-    console.log('🚀 ~ UserController ~ login ~ loginUser:', loginUser);
     return this.userService.login(loginUser);
   }
 

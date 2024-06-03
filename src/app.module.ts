@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppConfigService } from './app-config/app-config.service';
+import { BlogPostModule } from './blog-post/blog-post.module';
+import { PostCommentModule } from './post-comment/post-comment.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { AppConfigService } from './app-config/app-config.service';
       },
       inject: [AppConfigService],
     }),
+    BlogPostModule,
+    PostCommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

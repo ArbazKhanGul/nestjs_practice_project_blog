@@ -14,5 +14,6 @@ import { AccessTokenStrategy, RefreshTokenStrategy } from './strategies';
   ],
   controllers: [UserController],
   providers: [UserService, AccessTokenStrategy, RefreshTokenStrategy],
+  exports: [UserService],
 })
 export class UserModule {}

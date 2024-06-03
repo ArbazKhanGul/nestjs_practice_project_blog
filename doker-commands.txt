@@ -1,0 +1,3 @@
+docker compose --profile dev up -d --build  //to run docker compose using profile
+docker compose --profile dev down   //to down docker compose profile
+docker compose logs app -f //to see the logs inside specific image
