@@ -1,11 +1,9 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { InputType, PickType } from '@nestjs/graphql';
+import { BlogPost } from '../entities/blog-post.entity';
 
-export class CreateBlogPost {
-  @IsString()
-  @IsNotEmpty()
-  title: string;
-
-  @IsString()
-  @IsNotEmpty()
-  content: string;
-}
+@InputType()
+export class CreateBlogPostInput extends PickType(
+  BlogPost,
+  ['title', 'content'],
+  InputType,
+) {}

@@ -1,14 +1,14 @@
-import { IsUUID, IsOptional, IsString } from 'class-validator';
+import { Field, InputType, PartialType, PickType } from '@nestjs/graphql';
+import { IsUUID } from 'class-validator';
+import { BlogPost } from '../entities/blog-post.entity';
 
-export class UpdateBlogPostDto {
+@InputType()
+export class UpdateBlogPostInput extends PickType(
+  PartialType(BlogPost),
+  ['title', 'content'],
+  InputType,
+) {
+  @Field(() => String)
   @IsUUID()
   id: string;
-
-  @IsOptional()
-  @IsString()
-  title?: string;
-
-  @IsOptional()
-  @IsString()
-  content?: string;
 }

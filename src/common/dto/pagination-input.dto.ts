@@ -1,22 +1,29 @@
-import { IsOptional, IsNumber } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Field, InputType, Int, registerEnumType } from '@nestjs/graphql';
+import { IsEnum, IsInt, Max, Min } from 'class-validator';
 
 export enum SortOrder {
   ASC = 'ASC',
   DESC = 'DESC',
 }
 
+registerEnumType(SortOrder, {
+  name: 'SortOrder',
+});
+
+@InputType()
 export class PaginationDto {
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
+  @Field(() => Int, { nullable: true })
+  @IsInt()
+  @Min(1)
+  @Max(50)
   limit: number = 10;
 
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
+  @Field(() => Int, { nullable: true })
+  @IsInt()
+  @Min(0)
   offset: number = 0;
 
-  @IsOptional()
-  sort: SortOrder = SortOrder.ASC;
+  @Field(() => SortOrder, { nullable: true })
+  @IsEnum(SortOrder)
+  sort: SortOrder = SortOrder.DESC;
 }

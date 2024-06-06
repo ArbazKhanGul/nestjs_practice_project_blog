@@ -19,7 +19,6 @@ export default class UserSeeder implements Seeder {
     admin.name = 'admin';
     admin.role = UserRole.admin;
     admin.password = '12345678';
-    admin.profileImage = 'default image';
 
     // Save data to the database
     await dataSource.manager.save(admin);
