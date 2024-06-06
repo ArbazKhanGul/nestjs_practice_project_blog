@@ -1,15 +1,14 @@
-import { IsString, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
+import {
+  InputType,
+  IntersectionType,
+  PartialType,
+  PickType,
+} from '@nestjs/graphql';
+import { PostComment } from '../entities/post-comment.entity';
 
-export class CreatePostCommentDto {
-  @IsUUID()
-  @IsOptional()
-  post_id?: string;
-
-  @IsUUID()
-  @IsOptional()
-  parent_comment_id?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  content: string;
-}
+@InputType()
+export class CreatePostCommentInput extends IntersectionType(
+  PartialType(PickType(PostComment, ['post_id', 'parent_comment_id'] as const)),
+  PickType(PostComment, ['content'] as const),
+  InputType,
+) {}

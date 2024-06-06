@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PostComment } from './entities/post-comment.entity';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
-import { CreatePostCommentDto } from './dto/create-post-comment.dto';
+import { CreatePostCommentInput as CreatePostCommentDto } from './dto/create-post-comment.dto';
 import { TokenPayload } from 'src/user/types/jwt.types';
 import { BlogPostService } from 'src/blog-post/blog-post.service';
 import { GetPostCommentsInput } from './dto/get-post-comment.dto';
